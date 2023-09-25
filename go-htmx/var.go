@@ -19,9 +19,3 @@ type Item struct {
 	Completed CustomTime `json:"datecompleted,omitempty"`
 }
 
-type User struct {
-	Username string     `json:"username"`
-	Surname  string     `json:"surname"`
-	Name     string     `json:"name"`
-	Created  CustomTime `json:"datecreated"`
-}

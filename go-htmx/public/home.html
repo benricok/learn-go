@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    {{ template "header" . }}
+    <body>
+        <div id="content">
+            {{ template "nav" . }}
+            {{ template "home" . }}
+        </div>
+    </body>
+</html>
+
+{{block "home" .}}
+<div hx-boost="true" id="content">
+    <h1>Home</h1>
+</div>
+{{end}}

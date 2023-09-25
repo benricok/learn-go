@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+    {{ template "header" . }}
+    <body>
+        <div id="login">
+            <form action="/login" method="POST">
+                User: <input type='text' name='username' placeholder=' username'><br>
+                Password: <input type='password' class="password" name='password' placeholder=' password'>
+                <button type='submit'>Sign In</button>
+            </form>
+        </div>
+    </body>
+</html>

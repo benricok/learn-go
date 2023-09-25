@@ -1,14 +1,18 @@
 package main
 
 import (
+	"go-htmx/auth"
 	"go-htmx/database"
+	"go-htmx/endpoints"
+	"html/template"
 	"log"
 	"os"
-	"text/template"
 
+	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
+
 
 
 func main() {
@@ -24,6 +28,11 @@ func main() {
 
 	tmpl, err := template.ParseFiles(
 		"./public/index.html",
+		"./public/header.html",
+		"./public/nav.html",
+		"./public/home.html",
+		"./public/help.html",
+		"./public/settings.html",
 	)
 
 	if err != nil {
@@ -31,10 +40,26 @@ func main() {
 	}
 
     e := echo.New()
-	e.Renderer = endpoints.NewTemplateRenderer(tmpl)
 	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	app := e.Group("/app")
+	app.Use(echojwt.WithConfig(echojwt.Config{
+		NewClaimsFunc:	auth.Claim,
+		SigningKey: 	[]byte(auth.GetJWTSecret()),
+		TokenLookup: 	"cookie:access-token",
+		ErrorHandler:	auth.JWTErrorChecker,
+	}))
+
+	e.Renderer = endpoints.NewTemplateRenderer(tmpl)
 
 	e.GET("/", endpoints.HandleIndex)
+	e.GET("/login", endpoints.HandleLoginForm)
+	e.POST("/login", endpoints.Login)
+
+	app.GET("/app/home", endpoints.HandleHome)
+	app.GET("/app/settings", endpoints.HandleSettings)
+	app.GET("/app/help", endpoints.HandleHelp)
 
     e.Logger.Fatal(e.Start("127.0.0.1:8080"))
 }

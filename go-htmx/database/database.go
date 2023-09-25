@@ -1,6 +1,11 @@
 package database
 
-import "database/sql"
+import (
+	"database/sql"
+
+	_ "github.com/libsql/libsql-client-go/libsql"
+	_ "modernc.org/sqlite"
+)
 
 type Database struct {
 	Db *sql.DB
