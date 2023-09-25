@@ -4,13 +4,7 @@
     <body>
         <div id="content">
             {{ template "nav" . }}
-            {{ template "home" . }}
+            Home!
         </div>
     </body>
 </html>
-
-{{block "home" .}}
-<div hx-boost="true" id="content">
-    <h1>Home</h1>
-</div>
-{{end}}

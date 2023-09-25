@@ -12,8 +12,13 @@ type Header struct {
     Title string
 }
 
+type Nav struct {
+	CurrentPage string
+}
+
 type Page struct {
 	Header
+	Nav
 }
 
 type TemplateRenderer struct {
@@ -37,6 +42,9 @@ func HandleHome(c echo.Context) error {
 		Header: Header{
 			Title: "TODO - Home",
 		},
+		Nav: Nav{
+			CurrentPage: "home",
+		},
 	})
 }
 
@@ -45,6 +53,9 @@ func HandleSettings(c echo.Context) error {
 		Header: Header{
 			Title: "TODO - Settings",
 		},
+		Nav: Nav{
+			CurrentPage: "settings",
+		},
 	})
 }
 
@@ -52,6 +63,9 @@ func HandleHelp(c echo.Context) error {
 	return c.Render(200, "help.html", Page{
 		Header: Header{
 			Title: "TODO - Help",
+		},
+		Nav: Nav{
+			CurrentPage: "help",
 		},
 	})
 }

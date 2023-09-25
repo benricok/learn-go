@@ -19,6 +19,10 @@ func GetJWTSecret() string {
 	return jwtSecretKey
 }
 
+func GetAccessTokenCookieName() string {
+	return accessTokenCookieName
+}
+
 // will be encoed to a JWT
 type Claims struct {
 	Name string `json:"name"`

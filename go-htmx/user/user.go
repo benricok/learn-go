@@ -18,7 +18,7 @@ func LoadTestUser() *User {
     // Test user with encrypted "test" password.
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte("test"), 8)
 	return &User{
-		Username: "test-user",
+		Username: "test",
 		Password: string(hashedPassword), 
 		Name: "Test",
 		Surname: "User",

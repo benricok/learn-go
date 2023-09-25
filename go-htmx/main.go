@@ -27,7 +27,7 @@ func main() {
 	}
 
 	tmpl, err := template.ParseFiles(
-		"./public/index.html",
+		"./public/login.html",
 		"./public/header.html",
 		"./public/nav.html",
 		"./public/home.html",
@@ -43,23 +43,27 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	app := e.Group("/app")
-	app.Use(echojwt.WithConfig(echojwt.Config{
-		NewClaimsFunc:	auth.Claim,
-		SigningKey: 	[]byte(auth.GetJWTSecret()),
-		TokenLookup: 	"cookie:access-token",
-		ErrorHandler:	auth.JWTErrorChecker,
-	}))
-
 	e.Renderer = endpoints.NewTemplateRenderer(tmpl)
 
 	e.GET("/", endpoints.HandleIndex)
+	e.GET("/css/style.css", func(c echo.Context) error { return c.File("./public/css/style.css")})
 	e.GET("/login", endpoints.HandleLoginForm)
 	e.POST("/login", endpoints.Login)
+	e.GET("/logout", endpoints.Logout)
 
-	app.GET("/app/home", endpoints.HandleHome)
-	app.GET("/app/settings", endpoints.HandleSettings)
-	app.GET("/app/help", endpoints.HandleHelp)
+	app := e.Group("/app")
+	{
+		app.Use(echojwt.WithConfig(echojwt.Config{
+			NewClaimsFunc:	auth.Claim,
+			SigningKey: 	[]byte(auth.GetJWTSecret()),
+			TokenLookup: 	"cookie:access-token",
+			ErrorHandler:	auth.JWTErrorChecker,
+		}))
+
+		app.GET("/home", endpoints.HandleHome)
+		app.GET("/settings", endpoints.HandleSettings)
+		app.GET("/help", endpoints.HandleHelp)
+	}
 
     e.Logger.Fatal(e.Start("127.0.0.1:8080"))
 }
