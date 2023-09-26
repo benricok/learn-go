@@ -4,6 +4,7 @@ import (
 	"go-htmx/auth"
 	"go-htmx/database"
 	"go-htmx/endpoints"
+	"go-htmx/user"
 	"html/template"
 	"log"
 	"os"
@@ -18,12 +19,17 @@ import (
 func main() {
 	db_url := os.Getenv("DB_URL")
 	if db_url == "" {
-		db_url = "./app.db"
+		db_url = "file://c:/users/bkadmin/Projects/Github/learn-go/go-htmx/app.db"
 	}
 
-	_, err := database.NewDatabase(db_url)
+	err := database.NewDatabase(db_url)
 	if err != nil {
 		log.Fatalf("Could not init db: %+v", err)
+	}
+
+	err = database.AddUser(user.LoadTestUser())
+	if err != nil {
+		log.Fatalf("Could not add test user: %+v", err)
 	}
 
 	tmpl, err := template.ParseFiles(
