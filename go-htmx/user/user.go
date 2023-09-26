@@ -9,8 +9,9 @@ import (
 type User struct {
 	Username string 	`json:"username" form:"username"` 
 	Password string 	`json:"password" form:"password"`
-	Surname  string     `json:"surname"`
-	Name     string     `json:"name"`
+	Name     string     `json:"name"     form:"name"`
+	Surname  string     `json:"surname"  form:"surname"`
+	Email	 string		`json:"email"    form:"email"`
 	Created  time.Time  `json:"datecreated"`
 }
 
@@ -22,6 +23,7 @@ func LoadTestUser() *User {
 		Password: string(hashedPassword), 
 		Name: "Test",
 		Surname: "User",
+		Email: "test@example.com",
 		Created: time.Now(),
 	}
 }

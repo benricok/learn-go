@@ -1,8 +1,10 @@
 package endpoints
 
 import (
+	"go-htmx/database"
 	"html/template"
 	"io"
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -16,9 +18,34 @@ type Nav struct {
 	CurrentPage string
 }
 
+type Userdata struct {
+	Username string
+	Name 	 string
+	Surname  string
+	Email 	 string
+}
+
 type Page struct {
 	Header
 	Nav
+	Userdata 
+}
+
+func LoadUserDataFromCookie(c echo.Context) (*Userdata) {
+	cookie, err := c.Cookie("user")
+	if err != nil {
+		log.Printf("Could not get cookie from request: %+v", err)
+		return nil
+	}
+
+	user, err := database.GetUser(cookie.Value)
+
+	return &Userdata{
+		Username: user.Username,
+		Name: user.Name,
+		Surname: user.Surname,
+		Email: user.Email,
+	}
 }
 
 type TemplateRenderer struct {
@@ -56,6 +83,7 @@ func HandleSettings(c echo.Context) error {
 		Nav: Nav{
 			CurrentPage: "settings",
 		},
+		Userdata: *LoadUserDataFromCookie(c),
 	})
 }
 
